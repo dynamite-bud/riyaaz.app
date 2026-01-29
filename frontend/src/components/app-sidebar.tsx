@@ -65,14 +65,12 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader>
-        <Link to="/" className="flex items-center gap-2 px-2 py-1 font-bold text-lg">
+      <SidebarHeader className="h-14 flex items-center border-b border-sidebar-border">
+        <Link to="/" className="flex items-center gap-2 px-2 font-bold text-lg">
           <Music className="h-5 w-5" />
           <span>Riyaaz</span>
         </Link>
       </SidebarHeader>
-
-      <SidebarSeparator />
 
       <SidebarContent>
         <SidebarGroup>
