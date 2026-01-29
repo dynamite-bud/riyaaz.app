@@ -38,7 +38,7 @@ dev:
 	@echo "   Docs:     http://localhost:8000/docs"
 	@echo ""
 	@trap 'kill 0' INT; \
-	(cd backend && uv run uvicorn app.main:app --reload --port 8000) & \
+	(cd backend && uv run python -m uvicorn app.main:app --reload --port 8000) & \
 	(cd frontend && bun run dev) & \
 	wait
 
