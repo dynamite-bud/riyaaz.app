@@ -27,11 +27,8 @@ A modern web application for practicing Indian Classical Music with real-time pi
 ```
 riyaaz.app/
 ├── frontend/          # React 19 + TypeScript + Vite
-├── backend/           # FastAPI + Python
-├── shared/            # Shared types and utilities
-├── docker/            # Docker configurations
-├── scripts/           # Development scripts
-└── .github/           # CI/CD workflows
+├── backend/           # FastAPI + Python 3.12
+└── makefile           # Monorepo orchestration
 ```
 
 ## Setup
@@ -47,63 +44,53 @@ riyaaz.app/
 # Install all dependencies
 make install
 
-# Start development servers (frontend:3000, backend:8000)
+# Start development servers
 make dev
-```
-
-### Individual Commands
-
-```bash
-# Frontend only
-cd frontend
-bun install
-bun run dev
-
-# Backend only
-cd backend
-uv sync --all-extras --dev
-uv run uvicorn app.main:app --reload
+# Frontend: http://localhost:5173
+# Backend:  http://localhost:8000
+# API Docs: http://localhost:8000/docs
 ```
 
 ## Development
 
-### Code Quality
+### Monorepo Commands (run from root)
 
 ```bash
-# Run all linters
-make lint
-
-# Format all code
-make format
-
-# Run all tests
-make test
+make help       # Show all available commands
+make install    # Install all dependencies
+make dev        # Start both servers
+make build      # Build frontend for production
+make test       # Run all tests
+make lint       # Run all linters
+make format     # Format all code
+make clean      # Clean artifacts
 ```
 
-### Frontend Commands
+### Frontend-Specific Commands (run from ./frontend)
 
 ```bash
-cd frontend
-bun run dev          # Start dev server
-bun run build        # Production build
-bun run preview      # Preview production build
-bun run typecheck    # Type checking
-bun run lint         # Lint code
-bun run format       # Format code
-bun run test         # Run unit tests
-bun run test:e2e     # Run E2E tests
+bun run dev              # Dev server only
+bun run build            # Production build
+bun run preview          # Preview production build
+bun run typecheck        # Type checking
+bun run test:watch       # Test in watch mode
+bun run test:coverage    # Test with coverage
+bun run test:e2e         # Run E2E tests
+bun run test:e2e:ui      # E2E tests with UI
+bun run lint             # Lint only frontend
+bun run lint:fix         # Lint and auto-fix
+bun run format           # Format only frontend
+bun run check            # Biome check + fix
 ```
 
-### Backend Commands
+### Backend-Specific Commands (run from ./backend)
 
 ```bash
-cd backend
-uv run uvicorn app.main:app --reload  # Start dev server
-uv run ruff check .                   # Lint code
-uv run ruff format .                  # Format code
-uv run pyright                        # Type check
-uv run pytest                         # Run tests
-uv run pytest --cov=app               # Run tests with coverage
+uv run uvicorn app.main:app --reload    # Dev server only
+uv run pytest --cov=app                 # Tests with coverage
+uv run ruff check .                     # Lint only backend
+uv run pyright                          # Type check only backend
+make backend-shell                      # Python REPL with context
 ```
 
 ## Features
@@ -131,11 +118,13 @@ uv run pytest --cov=app               # Run tests with coverage
 - Core audio processing with librosa, torch
 - WebSocket support for real-time features
 
-## CI/CD
+## Command Structure
 
-GitHub Actions workflows for:
-- Frontend: Type check → Lint → Test → Build
-- Backend: Lint → Format → Type check → Test
+This monorepo uses **Makefile for orchestration** and **package.json for workflows**:
+
+- **Root Makefile**: Commands that affect the entire project (install, dev, test, lint, format)
+- **Frontend package.json**: Frontend-specific workflows (watch mode, coverage, e2e tests, builds)
+- **Backend pyproject.toml**: Python tooling configuration (ruff, pyright, pytest)
 
 ## Contributing
 
