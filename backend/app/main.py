@@ -5,6 +5,8 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
+from scalar_fastapi import get_scalar_api_reference
 
 from app.api.routes import analysis, audio, sessions, settings
 from app.config import get_settings
@@ -29,6 +31,8 @@ def create_app() -> FastAPI:
         description="Indian Classical Music Practice Tool API",
         version="0.1.0",
         lifespan=lifespan,
+        docs_url=None,
+        redoc_url=None,
     )
 
     # CORS
@@ -50,6 +54,14 @@ def create_app() -> FastAPI:
     async def health_check() -> dict[str, str]:
         """Health check endpoint."""
         return {"status": "healthy", "service": "riyaaz-backend"}
+
+    @app.get("/docs", include_in_schema=False)
+    async def scalar_docs() -> HTMLResponse:
+        """Scalar API documentation."""
+        return get_scalar_api_reference(
+            openapi_url=app.openapi_url,
+            title="Riyaaz API",
+        )
 
     return app
 
