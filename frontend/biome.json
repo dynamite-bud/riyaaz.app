@@ -12,7 +12,8 @@
       "src/**/*.ts",
       "src/**/*.tsx",
       "tests/**/*.ts",
-      "tests/**/*.tsx"
+      "tests/**/*.tsx",
+      "!src/routeTree.gen.ts"
     ]
   },
   "formatter": {
@@ -39,7 +40,8 @@
       },
       "suspicious": {
         "noExplicitAny": "warn",
-        "noConsole": "warn"
+        "noConsole": "warn",
+        "noUnknownAtRules": "error"
       },
       "a11y": {
         "recommended": true
@@ -53,6 +55,11 @@
       "trailingCommas": "all",
       "semicolons": "always",
       "arrowParentheses": "always"
+    }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
     }
   }
 }
